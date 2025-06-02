@@ -7,7 +7,7 @@ namespace PW3.Controllers
 {
     public class UsuariosController : Controller
     {
-        private readonly string connectionString = "Server=localhost;Database=a;Uid=root;Pwd=;";
+        private readonly string connectionString = "Server=localhost;Database=aulabd2;Uid=root;Pwd=;";
         public IActionResult Index()
         {
             List<UsuarioEntidade> model = new List<UsuarioEntidade>();
@@ -15,7 +15,7 @@ namespace PW3.Controllers
             using var connection = new MySqlConnection(connectionString);
             connection.Open();
 
-            var cmd = new MySqlCommand("SELECT id, email FROM b", connection);
+            var cmd = new MySqlCommand("SELECT id, email FROM usuarios", connection);
             using var reader = cmd.ExecuteReader();
 
             while (reader.Read())

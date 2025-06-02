@@ -8,24 +8,27 @@ namespace PW3.Controllers
 {
     public class DisciplinasController : Controller
     {
-        private readonly string connectionString = "Server=localhost;Database=a;Uid=root;Pwd=;";
+        private readonly string connectionString = "Server=localhost;Database=aulabd2;Uid=root;Pwd=;";
         // GET: DisciplinasController
         public ActionResult Index()
         {
             List<DisciplinaEntidade> model = new List<DisciplinaEntidade>();
 
-            DisciplinaEntidade item1 = new DisciplinaEntidade();
-            item1.id = 1;
-            item1.Nome = "Programação Web";
-            item1.Ativo = true;
-            model.Add(item1);
 
-            DisciplinaEntidade item2 = new DisciplinaEntidade();
-            item2.id = 2;
-            item2.Nome = "Educação Fisica";
-            item2.Ativo = true;
-            model.Add(item2);
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
 
+            var cmd = new MySqlCommand("SELECT id, nome FROM disciplinas", connection);
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                DisciplinaEntidade u = new DisciplinaEntidade();
+                u.id = reader.GetInt32("id");
+                u.Nome = reader.GetString("nome");
+                model.Add(u);
+            }
+            connection.Close();
             return View(model);
         }
 
